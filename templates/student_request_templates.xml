@@ -1,0 +1,189 @@
+
+
+<odoo>
+    <template id="student_request_form" name="Cổng tiếp nhận yêu cầu sinh viên">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+
+                    <t t-if="request.params.get('submitted') == '1'">
+                        <div class="alert alert-success" role="alert">
+                            <strong>Gửi yêu cầu thành công!</strong>
+                            Yêu cầu của bạn đã được chuyển đến bộ phận tiếp nhận.
+                        </div>
+                    </t>
+
+                    <t t-if="request.params.get('error') == '1'">
+                        <div class="alert alert-danger" role="alert">
+                            Vui lòng kiểm tra và nhập đầy đủ thông tin hợp lệ.
+                        </div>
+                    </t>
+
+                    <t t-if="request.params.get('error') == '2'">
+                        <div class="alert alert-danger" role="alert">
+                            Tệp đính kèm vượt quá dung lượng 10 MB.
+                        </div>
+                    </t>
+
+                        <div class="text-center mb-4">
+                            <h1 class="fw-bold text-primary">
+                                CỔNG TIẾP NHẬN YÊU CẦU SINH VIÊN
+                            </h1>
+                            <p class="text-muted">
+                                Hệ thống tiếp nhận và hỗ trợ sinh viên
+                            </p>
+                        </div>
+
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-4">
+
+                                <h4 class="mb-3">Thông tin sinh viên</h4>
+
+                                <form action="/student/request/submit"
+                                      method="post"
+                                      enctype="multipart/form-data">
+
+                                    <input type="hidden"
+                                           name="csrf_token"
+                                           t-att-value="request.csrf_token()"/>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Họ và tên *
+                                        </label>
+                                        <input type="text"
+                                               name="student_name"
+                                               class="form-control"
+                                               required="required"
+                                               placeholder="Nhập họ và tên"/>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">
+                                                Mã sinh viên *
+                                            </label>
+                                            <input type="text"
+                                                   name="student_id"
+                                                   class="form-control"
+                                                   required="required"/>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">
+                                                Lớp *
+                                            </label>
+                                            <input type="text"
+                                                   name="student_class"
+                                                   class="form-control"
+                                                   required="required"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Ngành
+                                        </label>
+                                        <input type="text"
+                                               name="student_faculty"
+                                               class="form-control"/>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">
+                                                Email *
+                                            </label>
+                                            <input type="email"
+                                                   name="email"
+                                                   class="form-control"
+                                                   required="required"/>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">
+                                                Số điện thoại
+                                            </label>
+                                            <input type="tel"
+                                                   name="phone"
+                                                   class="form-control"/>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4"/>
+
+                                    <h4 class="mb-3">Nội dung yêu cầu</h4>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Loại yêu cầu *
+                                        </label>
+                                        <select name="request_type"
+                                                class="form-select"
+                                                required="required">
+                                            <option value="">-- Chọn loại yêu cầu --</option>
+                                            <option value="confirmation">YC01 - Xác nhận sinh viên</option>
+                                            <option value="transcript">YC02 - Xin bảng điểm</option>
+                                            <option value="student_card">YC03 - Cấp lại thẻ sinh viên</option>
+                                            <option value="personal_info">YC04 - Điều chỉnh thông tin cá nhân</option>
+                                            <option value="other">YC05 - Đăng ký giấy tờ khác</option>
+                                            <option value="yc06">YC06 - Khiếu nại kết quả học tập</option>
+                                            <option value="yc07">YC07 - Tư vấn học vụ</option>
+                                            <option value="yc08">YC08 - Yêu cầu hỗ trợ tài khoản</option>
+                                            <option value="yc09">YC09 - Đề nghị xem xét miễn học phần</option>
+                                            <option value="yc10">YC10 - Đăng ký học lại</option>
+                                            <option value="yc11">YC11 - Đăng ký học cải thiện</option>
+                                            <option value="yc12">YC12 - Xin rút học phần</option>
+                                            <option value="yc13">YC13 - Khiếu nại hoặc phản ánh dịch vụ</option>
+                                            <option value="yc14">YC14 - Xin hoãn thi</option>
+                                            <option value="yc15">YC15 - Xin xác nhận học phí</option>
+                                            <option value="yc16">YC16 - Đề nghị hoàn trả học phí</option>
+                                            <option value="yc17">YC17 - Xin giấy giới thiệu thực tập</option>
+                                            <option value="yc18">YC18 - Xét điều kiện tốt nghiệp</option>
+                                            <option value="yc19">YC19 - Đăng ký xét học bổng</option>
+                                            <option value="yc20">YC20 - Báo lỗi cổng thông tin sinh viên</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Nội dung chi tiết *
+                                        </label>
+                                        <textarea name="request_description"
+                                                  class="form-control"
+                                                  rows="5"
+                                                  required="required"
+                                                  placeholder="Mô tả yêu cầu của bạn..."/>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">
+                                            Hồ sơ đính kèm
+                                        </label>
+                                        <input type="file"
+                                               name="attachment"
+                                               class="form-control"/>
+                                        <small class="text-muted">
+                                            Có thể đính kèm giấy tờ liên quan
+                                            đến yêu cầu.
+                                        </small>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit"
+                                                class="btn btn-primary btn-lg px-5">
+                                            Gửi yêu cầu
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

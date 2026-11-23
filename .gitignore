@@ -1,0 +1,39 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.conf
+
+# Odoo runtime
+*.log
+*.pid
+.sessions/
+filestore/
+.odoo/
+
+# Database backups
+*.dump
+*.sql
+*.backup
+*.bak
+
+# IDE
+.vscode/
+.idea/
+
+# Operating system
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.swp
+*~

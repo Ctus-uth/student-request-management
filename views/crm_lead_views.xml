@@ -1,0 +1,272 @@
+
+<odoo>
+    <!-- GIAO DIEN FORM YEU CAU SINH VIEN -->
+    <record id="view_crm_lead_form_student_request" model="ir.ui.view">
+        <field name="name">crm.lead.form.student.request</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+        <field name="priority">99</field>
+
+        <field name="arch" type="xml">
+
+            <!-- Xoa placeholder mac dinh cua ten yeu cau -->
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="placeholder"/>
+            </xpath>
+
+            <!-- Doi ten Chuyen vien sales -->
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">Nhân viên phụ trách</attribute>
+            </xpath>
+
+            <!-- An doanh thu du kien -->
+            <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- An nut dat lich hop -->
+            <xpath expr="//button[@name='action_schedule_meeting']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- An nut bao gia moi -->
+            <xpath expr="//button[@name='action_sale_quotations_new']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An khu vuc nut thong ke CRM -->
+            <xpath expr="//div[hasclass('oe_button_box')]" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An nut Dat -->
+            <xpath expr="//button[@name='action_set_won_rainbowman']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An nut Mat -->
+            <xpath expr="//button[@name='558']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An nut Chuyen doi co hoi -->
+            <xpath expr="//button[@name='action_convert_to_opportunity']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An nut Khoi phuc -->
+            <xpath expr="//button[@name='action_restore']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An doanh thu va xac suat desktop -->
+            <xpath expr="//h2[contains(@class, 'd-none') and contains(@class, 'd-sm-flex')]" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An doanh thu va xac suat mobile -->
+            <xpath expr="//group[contains(@class, 'd-touch-flex')]" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An danh gia sao -->
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- Xoa tab Ghi chu -->
+            <xpath expr="//page[@name='internal_notes']" position="replace"/>
+
+            <!-- Xoa tab Thong tin bo sung -->
+            <xpath expr="//page[@name='extra']" position="replace"/>
+
+            <!-- FORM THONG TIN YEU CAU SINH VIEN -->
+            <xpath expr="//notebook" position="inside">
+                <page string="&#160;" name="student_request">
+
+                    <!-- THONG TIN SINH VIEN -->
+                    <group string="Thông tin sinh viên">
+                        <field name="student_id" string="Mã sinh viên"/>
+                        <field name="contact_name" string="Họ và tên"/>
+                        <field name="student_class" string="Lớp"/>
+                        <field name="student_faculty" string="Ngành"/>
+                    </group>
+
+                    <!-- NOI DUNG YEU CAU -->
+                    <group>
+                        <field name="request_description"
+                            string="Nội dung yêu cầu"
+                            placeholder="Nhập nội dung sinh viên yêu cầu..."/>
+                    </group>
+
+                    <!-- THONG TIN XU LY -->
+                    <group string="Thông tin xử lý">
+                        <group>
+                            <field name="request_department"
+                                   string="Phòng hỗ trợ"/>
+                            <field name="request_received_date"
+                                   string="Ngày tiếp nhận"/>
+                            <field name="request_due_date"
+                                   string="Ngày dự kiến hoàn thành"/>
+                            <field name="completion_date"
+                                   string="Ngày hoàn tất"/>
+                        </group>
+
+                        <group>
+                            <field name="request_supplement_note"
+                                   placeholder="Ghi rõ giấy tờ hoặc thông tin sinh viên cần bổ sung..."/>
+                            <field name="resolution"
+                                   placeholder="Nhập kết quả xử lý..."/>
+                        </group>
+                    </group>
+
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- GIAO DIEN DANH SACH YEU CAU SINH VIEN -->
+    <record id="view_crm_lead_list_student_request" model="ir.ui.view">
+        <field name="name">crm.lead.list.student.request</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="priority">20</field>
+
+        <field name="arch" type="xml">
+
+            <!-- Bo sung cot thong tin sinh vien -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="request_code" string="Mã yêu cầu" optional="show"/>
+                <field name="student_id" string="Mã sinh viên" optional="show"/>
+                <field name="student_class" string="Lớp" optional="show"/>
+                <field name="request_type" string="Loại yêu cầu" optional="show"/>
+                <field name="request_received_date" string="Ngày tiếp nhận" optional="show"/>
+                <field name="request_department" string="Phòng hỗ trợ" optional="show"/>
+                <field name="request_due_date" string="Hạn xử lý" optional="show"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- PIVOT BAO CAO YEU CAU SINH VIEN -->
+    <record id="view_crm_lead_pivot_student_request" model="ir.ui.view">
+        <field name="name">crm.lead.pivot.student.request</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_pivot"/>
+        <field name="priority">99</field>
+
+        <field name="arch" type="xml">
+
+            <!-- Thay nhom theo thang bang bo phan xu ly -->
+            <xpath expr="//field[@name='create_date']" position="replace">
+                <field name="request_department" type="row"/>
+            </xpath>
+
+            <!-- Thay doanh thu bang so luong yeu cau -->
+            <xpath expr="//field[@name='expected_revenue']" position="replace"/>
+
+            <!-- Loai bo cac chi tieu doanh thu dinh ky -->
+            <xpath expr="//field[@name='recurring_revenue_monthly']" position="replace"/>
+            <xpath expr="//field[@name='recurring_revenue_monthly_prorated']" position="replace"/>
+            <xpath expr="//field[@name='recurring_revenue']" position="replace"/>
+            <xpath expr="//field[@name='recurring_revenue_prorated']" position="replace"/>
+
+        </field>
+    </record>
+
+    <!-- GIAO DIEN KANBAN QUAN LY YEU CAU SINH VIEN -->
+    <record id="view_crm_lead_kanban_student_request" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.student.request</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="priority">99</field>
+
+        <field name="arch" type="xml">
+
+            <!-- An ngoi sao uu tien -->
+            <xpath expr="//field[@name='priority']" position="replace"/>
+
+            <!-- An bieu tuong hoat dong -->
+            <xpath expr="//field[@name='activity_ids']" position="replace"/>
+
+            <!-- An khu vuc doanh thu -->
+            <xpath expr="//div[hasclass('o_kanban_card_crm_lead_revenue')]" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- An thanh doanh thu -->
+            <xpath expr="//progressbar" position="attributes">
+                <attribute name="invisible">True</attribute>
+                <attribute name="sum_field"/>
+                <attribute name="recurring_revenue_sum_field"/>
+            </xpath>
+
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="on_create"/>
+                <attribute name="quick_create_view"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- BO LOC TIM KIEM YEU CAU SINH VIEN -->
+    <record id="view_crm_lead_search_student_request" model="ir.ui.view">
+        <field name="name">crm.lead.search.student.request</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+        <field name="priority">99</field>
+
+        <field name="arch" type="xml">
+
+            <!-- Bo cac truong tim kiem CRM khong can thiet -->
+            <xpath expr="//field[@name='partner_id']" position="replace"/>
+            <xpath expr="//field[@name='city']" position="replace"/>
+            <xpath expr="//field[@name='country_id']" position="replace"/>
+            <xpath expr="//field[@name='phone_mobile_search']" position="replace"/>
+            <xpath expr="//field[@name='lead_properties']" position="replace"/>
+
+            <!-- Bo cac bo loc kinh doanh CRM -->
+            <xpath expr="//filter[@name='open_opportunities']" position="replace"/>
+            <xpath expr="//filter[@name='unassigned']" position="replace"/>
+            <xpath expr="//filter[@name='filter_won_status_pending']" position="replace"/>
+            <xpath expr="//filter[@name='filter_won_status_won']" position="replace"/>
+            <xpath expr="//filter[@name='filter_won_status_lost']" position="replace"/>
+            <xpath expr="//filter[@name='overdue_opp']" position="replace"/>
+
+            <!-- Bo cac nhom CRM khong lien quan -->
+            <xpath expr="//filter[@name='salesperson']" position="replace"/>
+            <xpath expr="//filter[@name='saleschannel']" position="replace"/>
+            <xpath expr="//filter[@name='city']" position="replace"/>
+            <xpath expr="//filter[@name='country']" position="replace"/>
+            <xpath expr="//filter[@name='lostreason']" position="replace"/>
+
+            <!-- Them truong tim kiem yeu cau sinh vien -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="request_code" string="Mã yêu cầu"/>
+                <field name="student_id" string="Mã sinh viên"/>
+                <field name="student_class" string="Lớp"/>
+                <field name="request_type" string="Loại yêu cầu"/>
+                <field name="request_department" string="Phòng hỗ trợ"/>
+            </xpath>
+
+            <!-- Them nhom loc -->
+            <xpath expr="//group" position="inside">
+                <filter name="group_request_department"
+                        string="Phòng hỗ trợ"
+                        context="{'group_by': 'request_department'}"/>
+                <filter name="group_request_type"
+                        string="Loại yêu cầu"
+                        context="{'group_by': 'request_type'}"/>
+                <filter name="group_request_received_date"
+                        string="Ngày tiếp nhận"
+                        context="{'group_by': 'request_received_date'}"/>
+                <filter name="group_request_due_date"
+                        string="Hạn xử lý"
+                        context="{'group_by': 'request_due_date'}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
