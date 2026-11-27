@@ -1,0 +1,139 @@
+
+<odoo>
+
+    <template id="student_survey_portal_scope"
+              inherit_id="survey.survey_page_fill"
+              name="Giao dien khao sat cong dich vu sinh vien">
+
+        <!-- Đánh dấu riêng khảo sát ID 6 -->
+        <xpath expr="//div[contains(concat(' ', normalize-space(@class), ' '), ' o_survey_wrap ')]"
+               position="attributes">
+            <attribute name="t-att-data-student-portal-survey">
+                'yes' if survey and survey.id == 6 else None
+            </attribute>
+        </xpath>
+
+        <!-- HEADER GIỐNG TRANG CHỦ -->
+        <xpath expr="//div[contains(concat(' ', normalize-space(@class), ' '), ' o_survey_wrap ')]"
+               position="before">
+
+            <t t-if="survey and survey.id == 6">
+                <header class="portal-header student-survey-header">
+                    <div class="container">
+                        <div class="portal-nav">
+
+                            <a href="/student" class="portal-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span class="portal-brand-text">
+                                    <strong>CỔNG DỊCH VỤ SINH VIÊN</strong>
+                                    <small>ĐỒNG HÀNH CÙNG SINH VIÊN</small>
+                                </span>
+                            </a>
+
+                            <nav class="portal-menu">
+                                <a href="/student">Trang chủ</a>
+                                <a href="/student#student-services">Dịch vụ</a>
+                            </nav>
+
+                        </div>
+                    </div>
+                </header>
+
+                <!-- GIỚI THIỆU KHẢO SÁT -->
+                <section class="student-survey-hero">
+                    <div class="container">
+
+                        <div class="student-survey-breadcrumb">
+                            <a href="/student">Trang chủ</a>
+                            <i class="fa fa-angle-right"/>
+                            <span>Khảo sát mức độ hài lòng</span>
+                        </div>
+
+                        <div class="student-survey-hero-content">
+                            <div class="student-survey-hero-text">
+
+                                <div class="portal-eyebrow">
+                                    <span/>
+                                    LẮNG NGHE Ý KIẾN SINH VIÊN
+                                </div>
+
+                                <h1>
+                                    Khảo sát mức độ
+                                    <br/>
+                                    <span>hài lòng của sinh viên.</span>
+                                </h1>
+
+                                <p>
+                                    Ý kiến đóng góp của bạn giúp nhà trường
+                                    nâng cao chất lượng dịch vụ và cải thiện
+                                    trải nghiệm hỗ trợ sinh viên.
+                                </p>
+
+                                <a href="/student"
+                                   class="student-survey-back">
+                                    <i class="fa fa-angle-left"/>
+                                    Quay về trang chủ
+                                </a>
+
+                            </div>
+
+                            <div class="student-survey-hero-visual">
+                                <div class="student-survey-visual-circle"/>
+                                <div class="student-survey-visual-card">
+                                    <div class="student-survey-visual-icon">
+                                        <i class="fa fa-comments"/>
+                                    </div>
+                                    <strong>Ý KIẾN CỦA BẠN</strong>
+                                    <span>
+                                        Mỗi chia sẻ đều góp phần
+                                        tạo nên sự thay đổi tích cực
+                                    </span>
+                                    <div class="student-survey-visual-line"/>
+                                    <div class="student-survey-visual-line short"/>
+                                    <div class="student-survey-visual-footer">
+                                        <i class="fa fa-heart"/>
+                                        LẮNG NGHE – CẢI THIỆN – PHÁT TRIỂN
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </t>
+
+        </xpath>
+
+        <!-- FOOTER GIỐNG TRANG CHỦ -->
+        <xpath expr="//div[contains(concat(' ', normalize-space(@class), ' '), ' o_survey_wrap ')]"
+               position="after">
+
+            <t t-if="survey and survey.id == 6">
+                <footer class="portal-footer student-survey-footer">
+                    <div class="container">
+
+                        <div class="portal-footer-content">
+                            <div class="portal-footer-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span>CỔNG DỊCH VỤ SINH VIÊN</span>
+                            </div>
+
+                            <p>
+                                Hệ thống tiếp nhận và quản lý yêu cầu sinh viên.
+                            </p>
+                        </div>
+
+                        <div class="portal-footer-bottom">
+                            <span>ĐỒNG HÀNH CÙNG SINH VIÊN</span>
+                            <span>© Cổng dịch vụ sinh viên</span>
+                        </div>
+
+                    </div>
+                </footer>
+            </t>
+
+        </xpath>
+
+    </template>
+
+</odoo>

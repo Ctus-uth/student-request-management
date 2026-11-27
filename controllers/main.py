@@ -1,12 +1,41 @@
 
 import base64
-from datetime import date, timedelta
+import mimetypes
 
+from datetime import date, timedelta
+from werkzeug.utils import secure_filename
 from odoo import http
 from odoo.http import request
 
 
 class StudentRequestController(http.Controller):
+
+    
+    # TRANG CHỦ CHÍNH THỨC CỦA WEBSITE
+    @http.route(
+        '/',
+        type='http',
+        auth='public',
+        website=True,
+        methods=['GET'],
+    )
+    def student_home(self, **kwargs):
+        return request.render(
+            'student_request_management.student_home',
+            {}
+        )
+
+    # TỰ ĐỘNG CHUYỂN VỀ TRANG CHỦ
+    @http.route(
+        '/student',
+        type='http',
+        auth='public',
+        website=True,
+        methods=['GET'],
+    )
+    def student_home_alias(self, **kwargs):
+        return request.redirect('/')
+
 
     @http.route(
         '/student/request',
@@ -172,15 +201,39 @@ class StudentRequestController(http.Controller):
         ]) or request_type not in request_type_names:
             return request.redirect('/student/request?error=1')
 
+        
         # Kiem tra file dinh kem truoc khi tao yeu cau
         uploaded_file = request.httprequest.files.get('attachment')
         file_content = None
+        safe_filename = None
+        file_mimetype = None
 
         if uploaded_file and uploaded_file.filename:
-            file_content = uploaded_file.read()
+            # Gioi han dung luong 10 MB
+            max_file_size = 10 * 1024 * 1024
 
-            if len(file_content) > 10 * 1024 * 1024:
+            # Doc toi da 10 MB + 1 byte de phat hien file qua lon
+            file_content = uploaded_file.stream.read(max_file_size + 1)
+
+            if len(file_content) > max_file_size:
                 return request.redirect('/student/request?error=2')
+
+            # Bo qua file rong
+            if not file_content:
+                file_content = None
+            else:
+                # Lam sach ten file
+                safe_filename = secure_filename(uploaded_file.filename)
+
+                if not safe_filename:
+                    return request.redirect('/student/request?error=2')
+
+                # Xac dinh MIME type dua tren phan mo rong
+                file_mimetype = (
+                    mimetypes.guess_type(safe_filename)[0]
+                    or 'application/octet-stream'
+                )
+
 
         # Lay quy tac xu ly tu dong
         rule = request_rules[request_type]
@@ -250,15 +303,19 @@ class StudentRequestController(http.Controller):
             'request_due_date': request_due_date,
         })
 
-        # Luu tai lieu dinh kem
+        
+        
+        # Luu tai lieu dinh kem vao yeu cau CRM
         if file_content:
             request.env['ir.attachment'].sudo().create({
-                'name': uploaded_file.filename,
-                'type': 'binary',
-                'datas': base64.b64encode(file_content),
+                'name': safe_filename,
+                'raw': file_content,
                 'res_model': 'crm.lead',
                 'res_id': lead.id,
-                'mimetype': uploaded_file.content_type,
+                'public': False,
             })
+
+
+       
 
         return request.redirect('/student/request?submitted=1')

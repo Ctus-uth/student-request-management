@@ -1,189 +1,1134 @@
 
-
 <odoo>
-    <template id="student_request_form" name="Cổng tiếp nhận yêu cầu sinh viên">
+
+    <!-- ===================================================== -->
+    <!-- LOGO NHẬN DIỆN CỔNG DỊCH VỤ SINH VIÊN -->
+    <!-- ===================================================== -->
+
+    <template id="student_portal_logo" name="Logo cổng dịch vụ sinh viên">
+        <span class="portal-brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 64 64"
+                 width="48"
+                 height="48"
+                 fill="none">
+                <path d="M15 9 H43 L51 17 V49 H15 Z"
+                      stroke="white"
+                      stroke-width="3"
+                      stroke-linejoin="round"/>
+                <path d="M43 9 V18 H51"
+                      stroke="white"
+                      stroke-width="3"
+                      stroke-linejoin="round"/>
+                <path d="M23 25 H42 M23 32 H38"
+                      stroke="white"
+                      stroke-width="3"
+                      stroke-linecap="round"/>
+                <path d="M22 43 L29 50 L44 35"
+                      stroke="#75C5FF"
+                      stroke-width="4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+            </svg>
+        </span>
+    </template>
+
+    <!-- ===================================================== -->
+    <!-- TRANG BIỂU MẪU TIẾP NHẬN YÊU CẦU -->
+    <!-- ===================================================== -->
+
+    <template id="student_request_form" name="Biểu mẫu dịch vụ sinh viên">
         <t t-call="website.layout">
-            <div id="wrap" class="container py-5">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
+            <t t-set="title">Gửi yêu cầu | Cổng dịch vụ sinh viên</t>
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-set="body_class" t-value="'student-portal-page student-form-page'"/>
 
-                    <t t-if="request.params.get('submitted') == '1'">
-                        <div class="alert alert-success" role="alert">
-                            <strong>Gửi yêu cầu thành công!</strong>
-                            Yêu cầu của bạn đã được chuyển đến bộ phận tiếp nhận.
+            <div id="wrap" class="student-portal student-form-portal">
+
+                <!-- HEADER -->
+                <header class="portal-header">
+                    <div class="container">
+                        <div class="portal-nav">
+                            <a href="/student" class="portal-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span class="portal-brand-text">
+                                    <strong>CỔNG DỊCH VỤ SINH VIÊN</strong>
+                                    <small>ĐỒNG HÀNH CÙNG SINH VIÊN</small>
+                                </span>
+                            </a>
+
+                            <nav class="portal-menu">
+                                <a href="/student">Trang chủ</a>
+                                <a href="/student#student-services">Dịch vụ</a>
+                                <a href="/contactus">Liên hệ</a>
+                            </nav>
+
+                            <a href="/web/login" class="portal-login">
+                                <i class="fa fa-user-circle me-2"/>
+                                Đăng nhập
+                            </a>
                         </div>
-                    </t>
+                    </div>
+                </header>
 
-                    <t t-if="request.params.get('error') == '1'">
-                        <div class="alert alert-danger" role="alert">
-                            Vui lòng kiểm tra và nhập đầy đủ thông tin hợp lệ.
+                <!-- HERO -->
+                <section class="request-hero">
+                    <div class="container">
+                        <div class="request-breadcrumb">
+                            <a href="/student">Trang chủ</a>
+                            <i class="fa fa-angle-right"/>
+                            <span>Gửi yêu cầu</span>
                         </div>
-                    </t>
 
-                    <t t-if="request.params.get('error') == '2'">
-                        <div class="alert alert-danger" role="alert">
-                            Tệp đính kèm vượt quá dung lượng 10 MB.
+                        <div class="request-hero-content">
+                            <div class="request-hero-text">
+                                <div class="portal-eyebrow">
+                                    <span/>
+                                    TRUNG TÂM HỖ TRỢ SINH VIÊN
+                                </div>
+
+                                <h1>
+                                    Chúng tôi luôn sẵn sàng
+                                    <br/>
+                                    <span>lắng nghe và hỗ trợ bạn.</span>
+                                </h1>
+
+                                <p>
+                                    Gửi thông tin và nội dung cần hỗ trợ đến
+                                    bộ phận phụ trách. Nhà trường sẽ tiếp nhận
+                                    và xử lý yêu cầu theo từng nhóm dịch vụ.
+                                </p>
+                            </div>
+
+                            <div class="request-hero-symbol">
+                                <i class="fa fa-file-text-o"/>
+                            </div>
                         </div>
-                    </t>
+                    </div>
+                </section>
 
-                        <div class="text-center mb-4">
-                            <h1 class="fw-bold text-primary">
-                                CỔNG TIẾP NHẬN YÊU CẦU SINH VIÊN
-                            </h1>
-                            <p class="text-muted">
-                                Hệ thống tiếp nhận và hỗ trợ sinh viên
+                <!-- FORM CONTENT -->
+                <section class="request-content">
+                    <div class="container">
+                        <div class="row g-4 justify-content-center">
+
+                            <!-- FORM MAIN -->
+                            <div class="col-lg-8">
+
+                                <!-- SUCCESS -->
+                                <t t-if="request.params.get('submitted') == '1'">
+                                    <div class="request-alert request-alert-success">
+                                        <div class="request-alert-icon">
+                                            <i class="fa fa-check"/>
+                                        </div>
+                                        <div>
+                                            <strong>Gửi yêu cầu thành công!</strong>
+                                            <p>
+                                                Thông tin của bạn đã được chuyển
+                                                đến bộ phận tiếp nhận.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <!-- ERROR -->
+                                <t t-if="request.params.get('error') == '1'">
+                                    <div class="request-alert request-alert-danger">
+                                        <div class="request-alert-icon">
+                                            <i class="fa fa-exclamation"/>
+                                        </div>
+                                        <div>
+                                            <strong>Chưa thể gửi yêu cầu</strong>
+                                            <p>
+                                                Vui lòng kiểm tra và nhập đầy đủ
+                                                thông tin hợp lệ.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <t t-if="request.params.get('error') == '2'">
+                                    <div class="request-alert request-alert-danger">
+                                        <div class="request-alert-icon">
+                                            <i class="fa fa-exclamation"/>
+                                        </div>
+                                        <div>
+                                            <strong>Tệp đính kèm vượt quá dung lượng cho phép</strong>
+                                            <p>
+                                                Vui lòng chọn tệp có dung lượng
+                                                không vượt quá 10 MB.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <div class="request-form-card">
+
+                                    <div class="request-form-heading">
+                                        <div>
+                                            <span class="request-form-kicker">
+                                                BIỂU MẪU TRỰC TUYẾN
+                                            </span>
+                                            <h2>Thông tin yêu cầu</h2>
+                                            <p>
+                                                Các trường có dấu
+                                                <span class="required-mark">*</span>
+                                                là thông tin bắt buộc.
+                                            </p>
+                                        </div>
+                                        <div class="request-form-heading-icon">
+                                            <i class="fa fa-clipboard"/>
+                                        </div>
+                                    </div>
+
+                                    <form action="/student/request/submit"
+                                          method="post"
+                                          enctype="multipart/form-data"
+                                          class="student-request-form">
+
+                                        <input type="hidden"
+                                               name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+
+                                        <!-- SECTION 1 -->
+                                        <div class="request-section">
+                                            <div class="request-section-heading">
+                                                <span class="request-section-number">01</span>
+                                                <div>
+                                                    <h3>Thông tin sinh viên</h3>
+                                                    <p>
+                                                        Cung cấp thông tin cá nhân
+                                                        để xác định người gửi yêu cầu.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <label class="request-label">
+                                                        Họ và tên
+                                                        <span class="required-mark">*</span>
+                                                    </label>
+                                                    <input type="text"
+                                                           name="student_name"
+                                                           class="form-control request-input"
+                                                           required="required"
+                                                           placeholder="Nhập họ và tên đầy đủ"/>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="request-label">
+                                                        Mã số sinh viên
+                                                        <span class="required-mark">*</span>
+                                                    </label>
+                                                    <input type="text"
+                                                           name="student_id"
+                                                           class="form-control request-input"
+                                                           required="required"
+                                                           placeholder="Nhập mã số sinh viên"/>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="request-label">
+                                                        Lớp
+                                                        <span class="required-mark">*</span>
+                                                    </label>
+                                                    <input type="text"
+                                                           name="student_class"
+                                                           class="form-control request-input"
+                                                           required="required"
+                                                           placeholder="Nhập lớp sinh hoạt"/>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label class="request-label">
+                                                        Ngành học
+                                                    </label>
+                                                    <input type="text"
+                                                           name="student_faculty"
+                                                           class="form-control request-input"
+                                                           placeholder="Nhập ngành học"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="request-divider"/>
+
+                                        <!-- SECTION 2 -->
+                                        <div class="request-section">
+                                            <div class="request-section-heading">
+                                                <span class="request-section-number">02</span>
+                                                <div>
+                                                    <h3>Thông tin liên hệ</h3>
+                                                    <p>
+                                                        Thông tin để nhà trường
+                                                        liên hệ khi cần trao đổi.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label class="request-label">
+                                                        Địa chỉ email
+                                                        <span class="required-mark">*</span>
+                                                    </label>
+                                                    <div class="request-input-icon">
+                                                        <i class="fa fa-envelope-o"/>
+                                                        <input type="email"
+                                                               name="email"
+                                                               class="form-control request-input"
+                                                               required="required"
+                                                               placeholder="Nhập địa chỉ email"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="request-label">
+                                                        Số điện thoại
+                                                    </label>
+                                                    <div class="request-input-icon">
+                                                        <i class="fa fa-phone"/>
+                                                        <input type="tel"
+                                                               name="phone"
+                                                               class="form-control request-input"
+                                                               placeholder="Nhập số điện thoại"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="request-divider"/>
+
+                                        <!-- SECTION 3 -->
+                                        <div class="request-section">
+                                            <div class="request-section-heading">
+                                                <span class="request-section-number">03</span>
+                                                <div>
+                                                    <h3>Nội dung cần hỗ trợ</h3>
+                                                    <p>
+                                                        Chọn nhóm dịch vụ và mô tả
+                                                        cụ thể vấn đề của bạn.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="request-type-wrapper">
+                                                <label class="request-label">
+                                                    Chọn nhóm dịch vụ và loại yêu cầu
+                                                    <span class="required-mark">*</span>
+                                                </label>
+
+                                                <!-- GIẤY TỜ VÀ XÁC NHẬN -->
+                                                <details class="request-type-group request-accordion-group"
+                                                    name="request-service-group"
+                                                    data-service-category="documents">
+                                                    <summary class="request-type-group-title request-accordion-title">
+                                                        <i class="fa fa-file-text-o"/>
+                                                        <span>Giấy tờ và xác nhận</span>
+                                                    </summary>
+
+                                                    <div class="request-type-grid">
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="confirmation" id="type-confirmation" class="request-type-radio" required="required"/>
+                                                            <label for="type-confirmation" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-certificate"/></span>
+                                                                <strong>Xác nhận sinh viên</strong>
+                                                                <small>Xin giấy xác nhận đang theo học</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="transcript" id="type-transcript" class="request-type-radio"/>
+                                                            <label for="type-transcript" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-list-alt"/></span>
+                                                                <strong>Xin bảng điểm</strong>
+                                                                <small>Đề nghị cấp bảng điểm học tập</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="other" id="type-other" class="request-type-radio"/>
+                                                            <label for="type-other" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-folder-open-o"/></span>
+                                                                <strong>Giấy tờ khác</strong>
+                                                                <small>Đăng ký các loại giấy tờ khác</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </details>
+
+                                                <!-- THÔNG TIN SINH VIÊN -->
+                                                <details class="request-type-group request-accordion-group"
+                                                    name="request-service-group"
+                                                    data-service-category="student">
+                                                    <summary class="request-type-group-title request-accordion-title">
+                                                        <i class="fa fa-id-card-o"/>
+                                                        <span>Thông tin sinh viên</span>
+                                                    </summary>
+
+                                                    <div class="request-type-grid">
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="student_card" id="type-student-card" class="request-type-radio"/>
+                                                            <label for="type-student-card" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-credit-card"/></span>
+                                                                <strong>Cấp lại thẻ sinh viên</strong>
+                                                                <small>Hỗ trợ cấp lại thẻ sinh viên</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="personal_info" id="type-personal-info" class="request-type-radio"/>
+                                                            <label for="type-personal-info" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-user-edit"/></span>
+                                                                <strong>Điều chỉnh thông tin</strong>
+                                                                <small>Cập nhật thông tin cá nhân</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </details>
+
+                                                <!-- HỖ TRỢ HỌC VỤ -->
+                                                <details class="request-type-group request-accordion-group"
+                                                    name="request-service-group"
+                                                    data-service-category="academic">
+                                                    <summary class="request-type-group-title request-accordion-title">
+                                                        <i class="fa fa-book"/>
+                                                        <span>Hỗ trợ học vụ</span>
+                                                    </summary>
+
+                                                    <div class="request-type-grid">
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc06" id="type-yc06" class="request-type-radio"/>
+                                                            <label for="type-yc06" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-exclamation-circle"/></span>
+                                                                <strong>Khiếu nại kết quả học tập</strong>
+                                                                <small>Đề nghị xem xét kết quả học tập</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc07" id="type-yc07" class="request-type-radio"/>
+                                                            <label for="type-yc07" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-comments"/></span>
+                                                                <strong>Tư vấn học vụ</strong>
+                                                                <small>Trao đổi các vấn đề học tập</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc08" id="type-yc08" class="request-type-radio"/>
+                                                            <label for="type-yc08" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-key"/></span>
+                                                                <strong>Hỗ trợ tài khoản</strong>
+                                                                <small>Khắc phục vấn đề tài khoản</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc09" id="type-yc09" class="request-type-radio"/>
+                                                            <label for="type-yc09" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-check-square-o"/></span>
+                                                                <strong>Miễn học phần</strong>
+                                                                <small>Đề nghị xem xét miễn học phần</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc10" id="type-yc10" class="request-type-radio"/>
+                                                            <label for="type-yc10" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-refresh"/></span>
+                                                                <strong>Đăng ký học lại</strong>
+                                                                <small>Hỗ trợ đăng ký học lại học phần</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc11" id="type-yc11" class="request-type-radio"/>
+                                                            <label for="type-yc11" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-line-chart"/></span>
+                                                                <strong>Học cải thiện</strong>
+                                                                <small>Đăng ký học cải thiện điểm</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc12" id="type-yc12" class="request-type-radio"/>
+                                                            <label for="type-yc12" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-sign-out"/></span>
+                                                                <strong>Rút học phần</strong>
+                                                                <small>Đề nghị rút học phần đã đăng ký</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc14" id="type-yc14" class="request-type-radio"/>
+                                                            <label for="type-yc14" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-calendar-times-o"/></span>
+                                                                <strong>Hoãn thi</strong>
+                                                                <small>Đề nghị xem xét hoãn thi</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </details>
+
+                                                <!-- HỌC PHÍ -->
+                                                <details class="request-type-group request-accordion-group"
+                                                    name="request-service-group"
+                                                    data-service-category="tuition">
+                                                    <summary class="request-type-group-title request-accordion-title">
+                                                        <i class="fa fa-credit-card"/>
+                                                        <span>Học phí</span>
+                                                    </summary>
+
+                                                    <div class="request-type-grid">
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc15" id="type-yc15" class="request-type-radio"/>
+                                                            <label for="type-yc15" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-file-text"/></span>
+                                                                <strong>Xác nhận học phí</strong>
+                                                                <small>Xin xác nhận thông tin học phí</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc16" id="type-yc16" class="request-type-radio"/>
+                                                            <label for="type-yc16" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-money"/></span>
+                                                                <strong>Hoàn trả học phí</strong>
+                                                                <small>Đề nghị hoàn trả khoản học phí</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </details>
+
+                                                <!-- THỰC TẬP VÀ TỐT NGHIỆP -->
+                                                <details class="request-type-group request-accordion-group"
+                                                    name="request-service-group"
+                                                    data-service-category="graduation">
+                                                    <summary class="request-type-group-title request-accordion-title">
+                                                        <i class="fa fa-graduation-cap"/>
+                                                        <span>Thực tập, tốt nghiệp và học bổng</span>
+                                                    </summary>
+
+                                                    <div class="request-type-grid">
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc17" id="type-yc17" class="request-type-radio"/>
+                                                            <label for="type-yc17" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-briefcase"/></span>
+                                                                <strong>Giấy giới thiệu thực tập</strong>
+                                                                <small>Xin giấy giới thiệu thực tập</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc18" id="type-yc18" class="request-type-radio"/>
+                                                            <label for="type-yc18" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-graduation-cap"/></span>
+                                                                <strong>Xét điều kiện tốt nghiệp</strong>
+                                                                <small>Kiểm tra điều kiện xét tốt nghiệp</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc19" id="type-yc19" class="request-type-radio"/>
+                                                            <label for="type-yc19" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-trophy"/></span>
+                                                                <strong>Đăng ký xét học bổng</strong>
+                                                                <small>Hỗ trợ đăng ký xét học bổng</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </details>
+
+                                                <!-- HỖ TRỢ VÀ PHẢN ÁNH -->
+                                                <details class="request-type-group request-accordion-group"
+                                                    name="request-service-group"
+                                                    data-service-category="support">
+                                                    <summary class="request-type-group-title request-accordion-title">
+                                                        <i class="fa fa-life-ring"/>
+                                                        <span>Hỗ trợ và phản ánh</span>
+                                                    </summary>
+
+                                                    <div class="request-type-grid">
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc13" id="type-yc13" class="request-type-radio"/>
+                                                            <label for="type-yc13" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-bullhorn"/></span>
+                                                                <strong>Khiếu nại hoặc phản ánh</strong>
+                                                                <small>Gửi phản ánh về dịch vụ sinh viên</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="request-type-item">
+                                                            <input type="radio" name="request_type" value="yc20" id="type-yc20" class="request-type-radio"/>
+                                                            <label for="type-yc20" class="request-type-card">
+                                                                <span class="request-type-icon"><i class="fa fa-laptop"/></span>
+                                                                <strong>Báo lỗi cổng thông tin</strong>
+                                                                <small>Thông báo sự cố hệ thống trực tuyến</small>
+                                                                <span class="request-type-check"><i class="fa fa-check"/></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </details>
+
+                                            </div>
+
+                                            <div class="request-description-field mt-4">
+                                                <label class="request-label">
+                                                    Nội dung yêu cầu
+                                                    <span class="required-mark">*</span>
+                                                </label>
+
+                                                <textarea name="request_description"
+                                                        class="form-control request-input"
+                                                        rows="5"
+                                                        required="required"
+                                                        placeholder="Mô tả chi tiết yêu cầu cần nhà trường hỗ trợ..."/>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="request-divider"/>
+
+                                        <!-- SECTION 4 -->
+                                        <div class="request-section">
+                                            <div class="request-section-heading">
+                                                <span class="request-section-number">04</span>
+                                                <div>
+                                                    <h3>Hồ sơ đính kèm</h3>
+                                                    <p>
+                                                        Bổ sung tài liệu liên quan
+                                                        để làm rõ nội dung yêu cầu nếu có.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="request-upload-area">
+                                                <i class="fa fa-cloud-upload"/>
+                                                <strong>Đính kèm tài liệu</strong>
+                                                <span>Chọn tài liệu từ thiết bị của bạn</span>
+
+                                                <input type="file"
+                                                       name="attachment"
+                                                       class="form-control"
+                                                       id="student-attachment"/>
+
+                                                <div class="request-upload-note">
+                                                    <i class="fa fa-info-circle"/>
+                                                    <span>Dung lượng tối đa 10 MB.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- SUBMIT -->
+                                        <div class="request-submit-area">
+                                            <p>
+                                                Vui lòng kiểm tra thông tin
+                                                trước khi gửi yêu cầu.
+                                            </p>
+                                            <button type="submit"
+                                                    class="request-submit-button">
+                                                Gửi yêu cầu
+                                                <i class="fa fa-arrow-right"/>
+                                            </button>
+                                            <a href="/student" class="request-back-link">
+                                                <i class="fa fa-angle-left me-1"/>
+                                                Quay lại trang chủ
+                                            </a>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- SIDE INFORMATION -->
+                            <div class="col-lg-4">
+                                <aside class="request-side-panel">
+
+                                    <div class="request-side-card request-side-highlight">
+                                        <div class="request-side-icon">
+                                            <i class="fa fa-headphones"/>
+                                        </div>
+                                        <h3>Luôn đồng hành cùng bạn</h3>
+                                        <p>
+                                            Mọi yêu cầu đều được chuyển đến
+                                            bộ phận phụ trách để tiếp nhận
+                                            và hỗ trợ theo nội dung đăng ký.
+                                        </p>
+                                    </div>
+
+                                    <div class="request-side-card">
+                                        <div class="request-side-title">
+                                            <i class="fa fa-lightbulb-o"/>
+                                            Lưu ý khi gửi yêu cầu
+                                        </div>
+                                        <ul class="request-tips">
+                                            <li>Kiểm tra chính xác mã số sinh viên.</li>
+                                            <li>Sử dụng địa chỉ email đang hoạt động.</li>
+                                            <li>Chọn đúng loại dịch vụ cần hỗ trợ.</li>
+                                            <li>Đính kèm giấy tờ liên quan nếu cần.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="request-side-card request-side-contact">
+                                        <div class="request-side-title">
+                                            <i class="fa fa-question-circle"/>
+                                            Bạn cần hỗ trợ thêm?
+                                        </div>
+                                        <p>
+                                            Nếu gặp khó khăn khi gửi biểu mẫu,
+                                            vui lòng liên hệ bộ phận phụ trách
+                                            của nhà trường.
+                                        </p>
+                                        <a href="/contactus">
+                                            Thông tin liên hệ
+                                            <i class="fa fa-arrow-right"/>
+                                        </a>
+                                    </div>
+
+                                </aside>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FOOTER -->
+                <footer class="portal-footer">
+                    <div class="container">
+                        <div class="portal-footer-content">
+                            <div class="portal-footer-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span>CỔNG DỊCH VỤ SINH VIÊN</span>
+                            </div>
+                            <p>
+                                Hệ thống tiếp nhận và quản lý yêu cầu sinh viên.
                             </p>
                         </div>
+                        <div class="portal-footer-bottom">
+                            <span>ĐỒNG HÀNH CÙNG SINH VIÊN</span>
+                            <span>© Cổng dịch vụ sinh viên</span>
+                        </div>
+                    </div>
+                </footer>
 
-                        <div class="card shadow-sm border-0">
-                            <div class="card-body p-4">
+            </div>
 
-                                <h4 class="mb-3">Thông tin sinh viên</h4>
+        
+            <script type="text/javascript">
+                (function () {
+                    function filterStudentServices() {
+                        const formPortal = document.querySelector(
+                            '.student-form-portal'
+                        );
 
-                                <form action="/student/request/submit"
-                                      method="post"
-                                      enctype="multipart/form-data">
+                        if (!formPortal) {
+                            return;
+                        }
 
-                                    <input type="hidden"
-                                           name="csrf_token"
-                                           t-att-value="request.csrf_token()"/>
+                        const selectedCategory = new URLSearchParams(
+                            window.location.search
+                        ).get('category');
 
-                                    <div class="mb-3">
-                                        <label class="form-label">
-                                            Họ và tên *
-                                        </label>
-                                        <input type="text"
-                                               name="student_name"
-                                               class="form-control"
-                                               required="required"
-                                               placeholder="Nhập họ và tên"/>
-                                    </div>
+                        const validCategories = [
+                            'documents',
+                            'student',
+                            'academic',
+                            'tuition',
+                            'graduation',
+                            'support'
+                        ];
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">
-                                                Mã sinh viên *
-                                            </label>
-                                            <input type="text"
-                                                   name="student_id"
-                                                   class="form-control"
-                                                   required="required"/>
-                                        </div>
+                        const isValidCategory =
+                            validCategories.includes(selectedCategory);
 
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">
-                                                Lớp *
-                                            </label>
-                                            <input type="text"
-                                                   name="student_class"
-                                                   class="form-control"
-                                                   required="required"/>
-                                        </div>
-                                    </div>
+                        const groups = formPortal.querySelectorAll(
+                            '.request-type-group'
+                        );
 
-                                    <div class="mb-3">
-                                        <label class="form-label">
-                                            Ngành
-                                        </label>
-                                        <input type="text"
-                                               name="student_faculty"
-                                               class="form-control"/>
-                                    </div>
+                        let firstVisibleRadio = null;
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">
-                                                Email *
-                                            </label>
-                                            <input type="email"
-                                                   name="email"
-                                                   class="form-control"
-                                                   required="required"/>
-                                        </div>
+                        groups.forEach(function (group) {
+                            const category = group.dataset.serviceCategory;
 
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">
-                                                Số điện thoại
-                                            </label>
-                                            <input type="tel"
-                                                   name="phone"
-                                                   class="form-control"/>
-                                        </div>
-                                    </div>
+                            const isVisible =
+                                !isValidCategory ||
+                                category === selectedCategory;
 
-                                    <hr class="my-4"/>
+                            group.hidden = !isVisible;
 
-                                    <h4 class="mb-3">Nội dung yêu cầu</h4>
+                            if (isVisible &amp;&amp; isValidCategory) {
+                                group.open = true;
+                            }
 
-                                    <div class="mb-3">
-                                        <label class="form-label">
-                                            Loại yêu cầu *
-                                        </label>
-                                        <select name="request_type"
-                                                class="form-select"
-                                                required="required">
-                                            <option value="">-- Chọn loại yêu cầu --</option>
-                                            <option value="confirmation">YC01 - Xác nhận sinh viên</option>
-                                            <option value="transcript">YC02 - Xin bảng điểm</option>
-                                            <option value="student_card">YC03 - Cấp lại thẻ sinh viên</option>
-                                            <option value="personal_info">YC04 - Điều chỉnh thông tin cá nhân</option>
-                                            <option value="other">YC05 - Đăng ký giấy tờ khác</option>
-                                            <option value="yc06">YC06 - Khiếu nại kết quả học tập</option>
-                                            <option value="yc07">YC07 - Tư vấn học vụ</option>
-                                            <option value="yc08">YC08 - Yêu cầu hỗ trợ tài khoản</option>
-                                            <option value="yc09">YC09 - Đề nghị xem xét miễn học phần</option>
-                                            <option value="yc10">YC10 - Đăng ký học lại</option>
-                                            <option value="yc11">YC11 - Đăng ký học cải thiện</option>
-                                            <option value="yc12">YC12 - Xin rút học phần</option>
-                                            <option value="yc13">YC13 - Khiếu nại hoặc phản ánh dịch vụ</option>
-                                            <option value="yc14">YC14 - Xin hoãn thi</option>
-                                            <option value="yc15">YC15 - Xin xác nhận học phí</option>
-                                            <option value="yc16">YC16 - Đề nghị hoàn trả học phí</option>
-                                            <option value="yc17">YC17 - Xin giấy giới thiệu thực tập</option>
-                                            <option value="yc18">YC18 - Xét điều kiện tốt nghiệp</option>
-                                            <option value="yc19">YC19 - Đăng ký xét học bổng</option>
-                                            <option value="yc20">YC20 - Báo lỗi cổng thông tin sinh viên</option>
-                                        </select>
-                                    </div>
+                            if (isVisible &amp;&amp; !firstVisibleRadio) {
+                                firstVisibleRadio = group.querySelector(
+                                    'input[name="request_type"]'
+                                );
+                            }
+                        });
 
-                                    <div class="mb-3">
-                                        <label class="form-label">
-                                            Nội dung chi tiết *
-                                        </label>
-                                        <textarea name="request_description"
-                                                  class="form-control"
-                                                  rows="5"
-                                                  required="required"
-                                                  placeholder="Mô tả yêu cầu của bạn..."/>
-                                    </div>
+                        const allRadios = formPortal.querySelectorAll(
+                            'input[name="request_type"]'
+                        );
 
-                                    <div class="mb-4">
-                                        <label class="form-label">
-                                            Hồ sơ đính kèm
-                                        </label>
-                                        <input type="file"
-                                               name="attachment"
-                                               class="form-control"/>
-                                        <small class="text-muted">
-                                            Có thể đính kèm giấy tờ liên quan
-                                            đến yêu cầu.
-                                        </small>
-                                    </div>
+                        allRadios.forEach(function (radio) {
+                            radio.required = false;
+                        });
 
-                                    <div class="text-center">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-lg px-5">
-                                            Gửi yêu cầu
-                                        </button>
-                                    </div>
+                        if (firstVisibleRadio) {
+                            firstVisibleRadio.required = true;
+                        }
+                    }
 
-                                </form>
+                    if (document.readyState === 'loading') {
+                        document.addEventListener(
+                            'DOMContentLoaded',
+                            filterStudentServices
+                        );
+                    } else {
+                        filterStudentServices();
+                    }
+                })();
+            </script>
+
+
+        </t>
+    </template>
+
+    <!-- ===================================================== -->
+    <!-- TRANG CHỦ CỔNG DỊCH VỤ SINH VIÊN -->
+    <!-- ===================================================== -->
+
+    <template id="student_home" name="Cổng dịch vụ sinh viên">
+        <t t-call="website.layout">
+            <t t-set="title">Cổng dịch vụ sinh viên</t>
+            <t t-set="body_class" t-value="'student-portal-page'"/>
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+
+            <div id="wrap" class="student-portal">
+
+                <!-- HEADER -->
+                <header class="portal-header">
+                    <div class="container">
+                        <div class="portal-nav">
+                            <a href="/student" class="portal-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span class="portal-brand-text">
+                                    <strong>CỔNG DỊCH VỤ SINH VIÊN</strong>
+                                    <small>ĐỒNG HÀNH CÙNG SINH VIÊN</small>
+                                </span>
+                            </a>
+
+                            <nav class="portal-menu">
+                                <a href="/student" class="active">Trang chủ</a>
+                                <a href="#student-services">Dịch vụ</a>
+                                <a href="/contactus">Liên hệ</a>
+                            </nav>
+
+                            <a href="/web/login" class="portal-login">
+                                <i class="fa fa-user-circle me-2"/>
+                                Đăng nhập
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- HERO -->
+                <section class="portal-hero">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-7">
+                                <div class="portal-eyebrow">
+                                    <span/>
+                                    CỔNG HỖ TRỢ TRỰC TUYẾN
+                                </div>
+
+                                <h1>
+                                    Mọi dịch vụ sinh viên,
+                                    <br/>
+                                    <span>kết nối trong một nơi.</span>
+                                </h1>
+
+                                <p class="portal-hero-description">
+                                    Tiếp nhận yêu cầu, đề nghị và phản ánh
+                                    liên quan đến học tập, hồ sơ sinh viên
+                                    và các dịch vụ hỗ trợ của nhà trường.
+                                    Nhanh chóng, thuận tiện và dễ dàng.
+                                </p>
+
+                                <div class="portal-hero-actions">
+                                    <a href="/student/request"
+                                       class="portal-primary-button">
+                                        <i class="fa fa-paper-plane me-2"/>
+                                        Gửi yêu cầu ngay
+                                    </a>
+                                    <a href="#student-services"
+                                       class="portal-secondary-button">
+                                        Khám phá dịch vụ
+                                        <i class="fa fa-arrow-down ms-2"/>
+                                    </a>
+                                </div>
                             </div>
+
+                            <div class="col-lg-5">
+                                <div class="portal-hero-visual">
+                                    <div class="portal-visual-circle"/>
+                                    <div class="portal-visual-card">
+                                        <div class="portal-visual-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 viewBox="0 0 64 64"
+                                                 width="54"
+                                                 height="54"
+                                                 fill="none">
+                                                <path d="M15 9 H43 L51 17 V49 H15 Z"
+                                                      stroke="white"
+                                                      stroke-width="3"
+                                                      stroke-linejoin="round"/>
+                                                <path d="M43 9 V18 H51"
+                                                      stroke="white"
+                                                      stroke-width="3"
+                                                      stroke-linejoin="round"/>
+                                                <path d="M23 25 H42 M23 32 H38"
+                                                      stroke="white"
+                                                      stroke-width="3"
+                                                      stroke-linecap="round"/>
+                                                <path d="M22 43 L29 50 L44 35"
+                                                      stroke="#75C5FF"
+                                                      stroke-width="4"
+                                                      stroke-linecap="round"
+                                                      stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <div class="portal-visual-title">
+                                            DỊCH VỤ SINH VIÊN
+                                        </div>
+                                        <div class="portal-visual-subtitle">
+                                            Một nơi tiếp nhận mọi nhu cầu
+                                            hỗ trợ trong quá trình học tập
+                                        </div>
+                                        <div class="portal-visual-line"/>
+                                        <div class="portal-visual-line short"/>
+                                        <div class="portal-visual-footer">
+                                            <i class="fa fa-graduation-cap"/>
+                                            KẾT NỐI – TIẾP NHẬN – HỖ TRỢ
+                                        </div>
+                                    </div>
+                                    <div class="portal-floating-icon">
+                                        <i class="fa fa-file-text-o"/>
+                                    </div>
+                                    <div class="portal-floating-icon second">
+                                        <i class="fa fa-book"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SERVICES -->
+                <section id="student-services" class="portal-services">
+                    <div class="container">
+
+                        <div class="portal-section-heading">
+                            <div>
+                                <div class="portal-section-label">
+                                    DANH MỤC DỊCH VỤ
+                                </div>
+                                <h2>Bạn cần chúng tôi hỗ trợ điều gì?</h2>
+                                <p>
+                                    Lựa chọn nhóm dịch vụ phù hợp với nhu cầu
+                                    của bạn.
+                                </p>
+                            </div>
+                            <a href="/student/request" class="portal-view-all">
+                                Tất cả yêu cầu
+                                <i class="fa fa-arrow-right ms-1"/>
+                            </a>
+                        </div>
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6 col-lg-4">
+                                <a href="/student/request?category=documents" class="portal-service-card">
+                                    <div class="portal-service-top">
+                                        <span class="portal-service-icon">
+                                            <i class="fa fa-file-text-o"/>
+                                        </span>
+                                        <span class="portal-service-arrow">
+                                            <i class="fa fa-arrow-up"/>
+                                        </span>
+                                    </div>
+                                    <h3>Giấy tờ và xác nhận</h3>
+                                    <p>
+                                        Xác nhận sinh viên, bảng điểm và
+                                        các loại giấy tờ phục vụ học tập.
+                                    </p>
+                                    <span class="portal-service-link">
+                                        Gửi yêu cầu
+                                        <i class="fa fa-arrow-right"/>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <a href="/student/request?category=student" class="portal-service-card">
+                                    <div class="portal-service-top">
+                                        <span class="portal-service-icon">
+                                            <i class="fa fa-id-card-o"/>
+                                        </span>
+                                        <span class="portal-service-arrow">
+                                            <i class="fa fa-arrow-up"/>
+                                        </span>
+                                    </div>
+                                    <h3>Thông tin sinh viên</h3>
+                                    <p>
+                                        Cấp lại thẻ sinh viên và điều chỉnh
+                                        thông tin cá nhân.
+                                    </p>
+                                    <span class="portal-service-link">
+                                        Gửi yêu cầu
+                                        <i class="fa fa-arrow-right"/>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <a href="/student/request?category=academic" class="portal-service-card">
+                                    <div class="portal-service-top">
+                                        <span class="portal-service-icon">
+                                            <i class="fa fa-book"/>
+                                        </span>
+                                        <span class="portal-service-arrow">
+                                            <i class="fa fa-arrow-up"/>
+                                        </span>
+                                    </div>
+                                    <h3>Hỗ trợ học vụ</h3>
+                                    <p>
+                                        Tư vấn học tập, đăng ký học phần,
+                                        miễn học phần và các vấn đề học vụ.
+                                    </p>
+                                    <span class="portal-service-link">
+                                        Gửi yêu cầu
+                                        <i class="fa fa-arrow-right"/>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <a href="/student/request?category=tuition" class="portal-service-card">
+                                    <div class="portal-service-top">
+                                        <span class="portal-service-icon">
+                                            <i class="fa fa-credit-card"/>
+                                        </span>
+                                        <span class="portal-service-arrow">
+                                            <i class="fa fa-arrow-up"/>
+                                        </span>
+                                    </div>
+                                    <h3>Dịch vụ học phí</h3>
+                                    <p>
+                                        Xác nhận thông tin học phí và
+                                        đề nghị hoàn trả học phí.
+                                    </p>
+                                    <span class="portal-service-link">
+                                        Gửi yêu cầu
+                                        <i class="fa fa-arrow-right"/>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <a href="/student/request?category=graduation" class="portal-service-card">
+                                    <div class="portal-service-top">
+                                        <span class="portal-service-icon">
+                                            <i class="fa fa-graduation-cap"/>
+                                        </span>
+                                        <span class="portal-service-arrow">
+                                            <i class="fa fa-arrow-up"/>
+                                        </span>
+                                    </div>
+                                    <h3>Thực tập và tốt nghiệp</h3>
+                                    <p>
+                                        Giấy giới thiệu thực tập, xét điều kiện
+                                        tốt nghiệp và đăng ký học bổng.
+                                    </p>
+                                    <span class="portal-service-link">
+                                        Gửi yêu cầu
+                                        <i class="fa fa-arrow-right"/>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <a href="/student/request?category=support" class="portal-service-card">
+                                    <div class="portal-service-top">
+                                        <span class="portal-service-icon">
+                                            <i class="fa fa-comments"/>
+                                        </span>
+                                        <span class="portal-service-arrow">
+                                            <i class="fa fa-arrow-up"/>
+                                        </span>
+                                    </div>
+                                    <h3>Hỗ trợ và phản ánh</h3>
+                                    <p>
+                                        Gửi phản ánh, yêu cầu hỗ trợ tài khoản
+                                        và báo lỗi hệ thống.
+                                    </p>
+                                    <span class="portal-service-link">
+                                        Gửi yêu cầu
+                                        <i class="fa fa-arrow-right"/>
+                                    </span>
+                                </a>
+                            </div>
+
                         </div>
 
                     </div>
-                </div>
+                </section>
+
+                <!-- FOOTER -->
+                <footer class="portal-footer">
+                    <div class="container">
+                        <div class="portal-footer-content">
+                            <div class="portal-footer-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span>CỔNG DỊCH VỤ SINH VIÊN</span>
+                            </div>
+                            <p>
+                                Hệ thống tiếp nhận và quản lý yêu cầu sinh viên.
+                            </p>
+                        </div>
+                        <div class="portal-footer-bottom">
+                            <span>ĐỒNG HÀNH CÙNG SINH VIÊN</span>
+                            <span>© Cổng dịch vụ sinh viên</span>
+                        </div>
+                    </div>
+                </footer>
+
             </div>
         </t>
     </template>
+
 </odoo>
