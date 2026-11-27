@@ -108,29 +108,52 @@
                     </div>
                 </section>
 
-                <!-- FORM CONTENT -->
-                <section class="request-content">
+ 		 <!-- REQUEST CONTENT -->
+                <section>
                     <div class="container">
-                        <div class="row g-4 justify-content-center">
-
-                            <!-- FORM MAIN -->
+                        <div class="row">
                             <div class="col-lg-8">
-
-                                <!-- SUCCESS -->
-                                <t t-if="request.params.get('submitted') == '1'">
+                
+                                <t t-if="submitted == '1'">
+                                    <t t-set="display_tracking_code" t-value="tracking_code or ''"/>
                                     <div class="request-alert request-alert-success">
                                         <div class="request-alert-icon">
                                             <i class="fa fa-check"/>
                                         </div>
+
                                         <div>
                                             <strong>Gửi yêu cầu thành công!</strong>
+
                                             <p>
                                                 Thông tin của bạn đã được chuyển
                                                 đến bộ phận tiếp nhận.
                                             </p>
+
+                                            <t t-if="tracking_code">
+                                                <div class="request-tracking-receipt">
+                                                    <strong>MÃ YÊU CẦU CỦA BẠN</strong>
+
+                                                    <div class="request-tracking-code">
+                                                        <span t-out="display_tracking_code"/>
+                                                    </div>
+
+                                                    <p>
+                                                        Vui lòng lưu lại mã này để tra cứu
+                                                        tình trạng xử lý yêu cầu.
+                                                    </p>
+
+                                                    <a href="/student/track">
+                                                        Tra cứu tình trạng yêu cầu
+                                                        <i class="fa fa-arrow-right"/>
+                                                    </a>
+                                                </div>
+                                            </t>
                                         </div>
                                     </div>
                                 </t>
+
+    
+
 
                                 <!-- ERROR -->
                                 <t t-if="request.params.get('error') == '1'">
@@ -1103,6 +1126,37 @@
                                 </a>
                             </div>
 
+
+                            
+                            
+                            <!-- THẺ THỨ 8: TRA CỨU YÊU CẦU -->
+                            <div class="col-md-6 col-lg-4">
+                                <a href="/student/track"
+                                class="portal-service-card portal-track-card">
+
+                                    <div class="portal-service-top">
+                                        <span class="portal-service-icon">
+                                            <i class="fa fa-search"/>
+                                        </span>
+                                        <span class="portal-service-arrow">
+                                            <i class="fa fa-arrow-up"/>
+                                        </span>
+                                    </div>
+
+                                    <h3>Tra cứu yêu cầu</h3>
+
+                                    <p>
+                                        Kiểm tra tình trạng tiếp nhận, tiến độ xử lý
+                                        và kết quả yêu cầu đã gửi đến nhà trường.
+                                    </p>
+
+                                    <span class="portal-service-link">
+                                        Tra cứu ngay
+                                        <i class="fa fa-arrow-right"/>
+                                    </span>
+                                </a>
+                            </div>
+
                         </div>
 
                     </div>
@@ -1130,5 +1184,348 @@
             </div>
         </t>
     </template>
+
+
+    <!-- ===================================================== -->
+    <!-- TRANG TRA CỨU TÌNH TRẠNG YÊU CẦU -->
+    <!-- ===================================================== -->
+
+    <template id="student_request_tracking" name="Tra cứu yêu cầu sinh viên">
+        <t t-call="website.layout">
+            <t t-set="title">Tra cứu yêu cầu | Cổng dịch vụ sinh viên</t>
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-set="body_class" t-value="'student-portal-page student-tracking-page'"/>
+
+            <div id="wrap" class="student-portal student-form-portal">
+
+                <!-- HEADER -->
+                <header class="portal-header">
+                    <div class="container">
+                        <div class="portal-nav">
+                            <a href="/student" class="portal-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span class="portal-brand-text">
+                                    <strong>CỔNG DỊCH VỤ SINH VIÊN</strong>
+                                    <small>ĐỒNG HÀNH CÙNG SINH VIÊN</small>
+                                </span>
+                            </a>
+
+                            <nav class="portal-menu">
+                                <a href="/student">Trang chủ</a>
+                                <a href="/student#student-services">Dịch vụ</a>
+                            </nav>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- HERO -->
+                <section class="request-hero">
+                    <div class="container">
+                        <div class="request-breadcrumb">
+                            <a href="/student">Trang chủ</a>
+                            <i class="fa fa-angle-right"/>
+                            <span>Tra cứu yêu cầu</span>
+                        </div>
+
+                        <div class="request-hero-content">
+                            <div class="request-hero-text">
+                                <div class="portal-eyebrow">
+                                    <span/>
+                                    TRUNG TÂM HỖ TRỢ SINH VIÊN
+                                </div>
+
+                                <h1>
+                                    Theo dõi yêu cầu
+                                    <br/>
+                                    <span>mọi lúc, mọi nơi.</span>
+                                </h1>
+
+                                <p>
+                                    Nhập mã yêu cầu được cấp sau khi gửi biểu mẫu
+                                    để kiểm tra tình trạng tiếp nhận, tiến độ xử lý
+                                    và kết quả từ bộ phận phụ trách.
+                                </p>
+                            </div>
+
+                            <div class="request-hero-symbol">
+                                <i class="fa fa-search"/>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TRACKING CONTENT -->
+                <section class="request-content">
+                    <div class="container">
+                        <div class="row g-4 justify-content-center">
+
+                            <div class="col-lg-8">
+
+                                <!-- SEARCH FORM -->
+                                <div class="request-form-card">
+
+                                    <div class="request-form-heading">
+                                        <div>
+                                            <span class="request-form-kicker">
+                                                TRA CỨU TRỰC TUYẾN
+                                            </span>
+                                            <h2>Tra cứu tình trạng yêu cầu</h2>
+                                            <p>
+                                                Vui lòng nhập chính xác mã yêu cầu
+                                                đã được cấp sau khi gửi biểu mẫu.
+                                            </p>
+                                        </div>
+
+                                        <div class="request-form-heading-icon">
+                                            <i class="fa fa-search"/>
+                                        </div>
+                                    </div>
+
+                                    <form action="/student/track"
+                                          method="post"
+                                          class="student-request-form">
+
+                                        <input type="hidden"
+                                               name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+
+                                        <div class="request-section">
+                                            <label class="request-label">
+                                                Mã yêu cầu
+                                                <span class="required-mark">*</span>
+                                            </label>
+
+                                            <input type="text"
+                                                   name="request_code"
+                                                   class="form-control request-input"
+                                                   required="required"
+                                                   autocomplete="off"
+                                                   placeholder="Nhập mã yêu cầu của bạn"/>
+
+                                            <p class="mt-2 text-muted">
+                                                Mã yêu cầu được hiển thị sau khi
+                                                bạn gửi biểu mẫu thành công.
+                                            </p>
+
+                                            <div class="request-submit-area">
+                                                <button type="submit"
+                                                        class="request-submit-button">
+                                                    Tra cứu ngay
+                                                    <i class="fa fa-search"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- ERROR -->
+                                    <t t-if="tracking_error">
+                                        <div class="request-alert request-alert-danger mt-3">
+                                            <div class="request-alert-icon">
+                                                <i class="fa fa-exclamation"/>
+                                            </div>
+                                            <div>
+                                                <strong>Không thể tra cứu yêu cầu</strong>
+                                                <p>
+                                                    <t t-out="tracking_error"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </t>
+
+                                    <!-- RESULT -->
+                                    <t t-if="tracking_result">
+                                        <div class="request-divider"/>
+
+                                        <div class="request-section">
+
+                                            <div class="request-section-heading">
+                                                <span class="request-section-number">
+                                                    <i class="fa fa-file-text-o"/>
+                                                </span>
+                                                <div>
+                                                    <h3>Kết quả tra cứu</h3>
+                                                    <p>
+                                                        Thông tin cập nhật từ hệ thống
+                                                        tiếp nhận yêu cầu sinh viên.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- REQUEST CODE -->
+                                            <div class="request-tracking-receipt">
+                                                <strong>MÃ YÊU CẦU</strong>
+                                                <div class="request-tracking-code">
+                                                    <t t-out="tracking_result['request_code']"/>
+                                                </div>
+                                            </div>
+
+                                            <!-- REQUEST INFORMATION -->
+                                            <div class="row g-3 mt-2">
+
+                                                <div class="col-md-6">
+                                                    <div class="request-tracking-info">
+                                                        <span>Loại yêu cầu</span>
+                                                        <strong>
+                                                            <t t-out="tracking_result['request_type']"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="request-tracking-info">
+                                                        <span>Phòng phụ trách</span>
+                                                        <strong>
+                                                            <t t-out="tracking_result['department']"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="request-tracking-info">
+                                                        <span>Ngày tiếp nhận</span>
+                                                        <strong>
+                                                            <t t-out="tracking_result['received_date']"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="request-tracking-info">
+                                                        <span>Hạn xử lý dự kiến</span>
+                                                        <strong>
+                                                            <t t-out="tracking_result['due_date']"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <!-- CURRENT STATUS -->
+                                            <div class="request-tracking-status mt-4">
+                                                <span>TRẠNG THÁI HIỆN TẠI</span>
+                                                <h3>
+                                                    <i class="fa fa-clock-o me-2"/>
+                                                    <t t-out="tracking_result['stage']"/>
+                                                </h3>
+                                            </div>
+
+                                            <!-- SUPPLEMENT NOTE -->
+                                            <t t-if="tracking_result['supplement_note']">
+                                                <div class="request-alert request-alert-danger mt-4">
+                                                    <div class="request-alert-icon">
+                                                        <i class="fa fa-info-circle"/>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Yêu cầu bổ sung thông tin</strong>
+                                                        <p>
+                                                            <t t-out="tracking_result['supplement_note']"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </t>
+
+                                            <!-- COMPLETION RESULT -->
+                                            <t t-if="tracking_result['resolution']">
+                                                <div class="request-alert request-alert-success mt-4">
+                                                    <div class="request-alert-icon">
+                                                        <i class="fa fa-check"/>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Kết quả xử lý</strong>
+                                                        <p>
+                                                            <t t-out="tracking_result['resolution']"/>
+                                                        </p>
+
+                                                        <t t-if="tracking_result['completion_date']">
+                                                            <p>
+                                                                <strong>Ngày hoàn tất:</strong>
+                                                                <t t-out="tracking_result['completion_date']"/>
+                                                            </p>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </t>
+
+                                        </div>
+                                    </t>
+
+                                </div>
+                            </div>
+
+                            <!-- SIDE INFORMATION -->
+                            <div class="col-lg-4">
+                                <aside class="request-side-panel">
+
+                                    <div class="request-side-card request-side-highlight">
+                                        <div class="request-side-icon">
+                                            <i class="fa fa-search"/>
+                                        </div>
+                                        <h3>Chủ động theo dõi yêu cầu</h3>
+                                        <p>
+                                            Hệ thống giúp bạn kiểm tra tình trạng
+                                            tiếp nhận và tiến độ xử lý yêu cầu
+                                            mà không cần gửi lại biểu mẫu.
+                                        </p>
+                                    </div>
+
+                                    <div class="request-side-card">
+                                        <div class="request-side-title">
+                                            <i class="fa fa-info-circle"/>
+                                            Hướng dẫn tra cứu
+                                        </div>
+                                        <ul class="request-tips">
+                                            <li>Mở lại mã yêu cầu được cấp sau khi gửi biểu mẫu.</li>
+                                            <li>Nhập đầy đủ mã vào ô tra cứu.</li>
+                                            <li>Kiểm tra trạng thái và thông tin phản hồi.</li>
+                                            <li>Lưu lại mã để sử dụng khi cần tra cứu.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="request-side-card request-side-contact">
+                                        <div class="request-side-title">
+                                            <i class="fa fa-question-circle"/>
+                                            Bạn chưa có mã yêu cầu?
+                                        </div>
+                                        <p>
+                                            Hãy gửi biểu mẫu để hệ thống tiếp nhận
+                                            và cấp mã tra cứu cho bạn.
+                                        </p>
+                                        <a href="/student/request">
+                                            Gửi yêu cầu
+                                            <i class="fa fa-arrow-right"/>
+                                        </a>
+                                    </div>
+
+                                </aside>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FOOTER -->
+                <footer class="portal-footer">
+                    <div class="container">
+                        <div class="portal-footer-content">
+                            <div class="portal-footer-brand">
+                                <t t-call="student_request_management.student_portal_logo"/>
+                                <span>CỔNG DỊCH VỤ SINH VIÊN</span>
+                            </div>
+                            <p>
+                                Hệ thống tiếp nhận và quản lý yêu cầu sinh viên.
+                            </p>
+                        </div>
+                        <div class="portal-footer-bottom">
+                            <span>ĐỒNG HÀNH CÙNG SINH VIÊN</span>
+                            <span>© Cổng dịch vụ sinh viên</span>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+        </t>
+    </template>
+
 
 </odoo>

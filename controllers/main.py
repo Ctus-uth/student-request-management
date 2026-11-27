@@ -44,11 +44,102 @@ class StudentRequestController(http.Controller):
         website=True,
         methods=['GET'],
     )
+
     def student_request_form(self, **kwargs):
+
+        tracking_code = (
+            kwargs.get('code')
+            or request.session.get('student_request_tracking_code')
+            or ''
+        ).strip()
+
+        submitted = (
+            kwargs.get('submitted')
+            or ''
+        )
+
         return request.render(
             'student_request_management.student_request_form',
-            {}
+            {
+                'tracking_code': tracking_code,
+                'submitted': submitted,
+            }
         )
+
+
+    # TRANG TRA CUU TINH TRANG YEU CAU
+    @http.route(
+        '/student/track',
+        type='http',
+        auth='public',
+        website=True,
+        methods=['GET', 'POST'],
+        csrf=True,
+    )
+    
+
+    def student_request_tracking(self, **kwargs):
+
+        tracking_result = False
+        tracking_error = False
+
+        if request.httprequest.method == 'POST':
+            code = (
+                request.params.get('request_code') or ''
+            ).strip()
+        else:
+            code = (
+                kwargs.get('code')
+                or request.httprequest.args.get('code')
+                or ''
+            ).strip()
+
+        if code:
+            lead = request.env['crm.lead'].sudo().search([
+                ('request_code', '=', code),
+                ('company_id', '=', 2),
+                ('team_id', '=', 7),
+            ], limit=1)
+
+            if not lead:
+                tracking_error = (
+                    'Không tìm thấy yêu cầu. '
+                    'Vui lòng kiểm tra lại mã yêu cầu.'
+                )
+            else:
+                request_type_label = dict(
+                    lead._fields['request_type'].selection
+                ).get(lead.request_type, '')
+
+                department_label = dict(
+                    lead._fields['request_department'].selection
+                ).get(lead.request_department, '')
+
+                tracking_result = {
+                    'request_code': lead.request_code,
+                    'request_type': request_type_label,
+                    'received_date': lead.request_received_date,
+                    'department': department_label,
+                    'stage': lead.stage_id.name,
+                    'due_date': lead.request_due_date,
+                    'supplement_note': lead.request_supplement_note,
+                    'resolution': lead.resolution,
+                    'completion_date': lead.completion_date,
+                }
+
+        elif request.httprequest.method == 'POST':
+            tracking_error = 'Vui lòng nhập mã yêu cầu.'
+
+        return request.render(
+            'student_request_management.student_request_tracking',
+            {
+                'tracking_result': tracking_result,
+                'tracking_error': tracking_error,
+            }
+        )
+
+
+
 
     def _calculate_due_date(self, working_days):
         """Tinh han xu ly theo ngay lam viec, khong tinh thu Bay va Chu Nhat."""
@@ -272,6 +363,7 @@ class StudentRequestController(http.Controller):
                 'Khong tim thay nhom tiep nhan yeu cau sinh vien.'
             )
 
+        
         # Giai doan ban dau
         stage = request.env['crm.stage'].sudo().search([
             ('name', '=', '01 - Mới tiếp nhận'),
@@ -280,6 +372,16 @@ class StudentRequestController(http.Controller):
         if not stage:
             return request.make_response(
                 'Khong tim thay giai doan Moi tiep nhan.'
+            )
+
+        # Tao ma tra cuu ngan gon theo so thu tu
+        request_code = request.env['ir.sequence'].sudo().with_company(2).next_by_code(
+            'student.request.code'
+        )
+
+        if not request_code:
+            return request.make_response(
+                'Khong the tao ma yeu cau. Vui long lien he quan tri vien.'
             )
 
         # Tao yeu cau trong CRM
@@ -296,6 +398,7 @@ class StudentRequestController(http.Controller):
             'student_id': student_id,
             'student_class': student_class,
             'student_faculty': student_faculty,
+            'request_code': request_code,
             'request_type': request_type,
             'request_description': description,
             'request_received_date': date.today(),
@@ -303,8 +406,6 @@ class StudentRequestController(http.Controller):
             'request_due_date': request_due_date,
         })
 
-        
-        
         # Luu tai lieu dinh kem vao yeu cau CRM
         if file_content:
             request.env['ir.attachment'].sudo().create({
@@ -316,6 +417,18 @@ class StudentRequestController(http.Controller):
             })
 
 
-       
+        tracking_code = lead.request_code or ''
 
-        return request.redirect('/student/request?submitted=1')
+        return request.redirect(
+            '/student/request?submitted=1&code=' + tracking_code
+        )
+
+        # Hien thi ket qua ngay sau khi luu thanh cong
+        return request.render(
+            'student_request_management.student_request_form',
+            {
+                'tracking_code': tracking_code,
+                'submitted': '1',
+            },
+            lazy=False,
+        )
